@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QuickBooks Connection - BM Plumbing</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 3em auto; padding: 0 1em; color: #222; }
+    .field { margin-bottom: 1.2em; }
+    label { display: block; font-size: 0.85em; color: #666; margin-bottom: 0.3em; }
+    .value { background: #f5f5f5; padding: 0.6em; border-radius: 4px; font-family: monospace; word-break: break-all; }
+    .error { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>QuickBooks authorization complete</h1>
+  <p>Copy these three values back into the terminal on the office server to finish connecting.</p>
+  <div id="out"></div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    const realmId = params.get("realmId");
+    const out = document.getElementById("out");
+
+        if (!code || !state || !realmId) {
+      const p = document.createElement("p");
+      p.className = "error";
+      p.textContent = "Missing expected parameters. Something went wrong - do not proceed, retry the connection from the server.";
+      out.appendChild(p);
+    } else {
+      for (const [label, value] of [["code", code], ["state", state], ["realmId", realmId]]) {
+        const field = document.createElement("div");
+        field.className = "field";
+        const labelEl = document.createElement("label");
+        labelEl.textContent = label;
+        const valueEl = document.createElement("div");
+        valueEl.className = "value";
+        valueEl.textContent = value;
+        field.appendChild(labelEl);
+        field.appendChild(valueEl);
+        out.appendChild(field);
+      }
+    }
+  </script>
+</body>
+</html>
